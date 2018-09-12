@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">AgendaSQLite</string>
+    <string name="nombre">Nombre</string>
+    <string name="telefono">Telefono</string>
+    <string name="correo">Correo</string>
+    <string name="guardar">Guardar</string>
+    <string name="buscar">Buscar</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="actualizar">actualizar</string>
+    <string name="listar">Listar</string>
+</resources>
