@@ -1,12 +1,16 @@
 package com.edwinacubillos.agendasqlite;
 
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -16,6 +20,8 @@ public class ListaActivity extends AppCompatActivity {
     private RecyclerView.LayoutManager layoutManager;
     private ArrayList<Contacto> listContactos;
     private ContactosAdapter contactosAdapter;
+    private FirebaseDatabase database;
+    private DatabaseReference myRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +43,41 @@ public class ListaActivity extends AppCompatActivity {
     }
 
     private void loadData() {
-        ContactosSQLiteHelper contactosSQLiteHelper;
+        database = FirebaseDatabase.getInstance();
+        myRef = database.getReference();
+
+        myRef.child("contactos").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Contacto contacto = snapshot.getValue(Contacto.class);
+                        listContactos.add(contacto);
+
+                    }
+                }
+                contactosAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /*    ContactosSQLiteHelper contactosSQLiteHelper;
         SQLiteDatabase dbContactos;
 
         contactosSQLiteHelper = new ContactosSQLiteHelper(
@@ -64,6 +104,6 @@ public class ListaActivity extends AppCompatActivity {
             contactosAdapter.notifyDataSetChanged();
         } else{
             Toast.makeText(this,"No hay contactos",Toast.LENGTH_SHORT).show();
-        }
+        }*/
     }
 }
